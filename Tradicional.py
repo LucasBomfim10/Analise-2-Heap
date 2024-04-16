@@ -33,13 +33,13 @@ def sqrt_sort_quadratico(vetor):
     # Dividir o vetor em partes
     for i in range(0, n, k):
         fim_parte = min(i + k, n)
-        if i + k >= n:  # Check if it's the last part
+        if i + k >= n:  
             fim_parte = n
         partes.append(vetor[i:fim_parte])
         bubbleSort(partes[-1])  # ordena as partes
         # partes[-1].sort()
 
-    print(partes)
+    #print(partes)
     while any(partes):
         # Encontrar o maior elemento de cada parte e comparar com o maior global
         maior_global = float('-inf')  # Inicializar o maior global
@@ -54,8 +54,8 @@ def sqrt_sort_quadratico(vetor):
         if partes[indice_global[0]]:  # Verificar se a parte não está vazia
             vetor_ordenado.insert(
                 0, partes[indice_global[0]].pop(indice_global[1]))
-        print(partes)
-        print(vetor_ordenado)
+        #print(partes)
+        #print(vetor_ordenado)
 
     return vetor_ordenado
 
@@ -64,11 +64,11 @@ def main():
     """
     Função principal para demonstração do algoritmo de ordenação por seleção de raiz quadrada.
     """
-    n = random.randint(10, 10)
+    n = random.randint(10000, 10000)
 
     vetor = [random.randint(1, 100) for _ in range(n)]
 
-    print("Vetor original:", vetor)
+    #print("Vetor original:", vetor)
 
     start_time = time.time()
     tempos_execucao = []
@@ -80,7 +80,7 @@ def main():
     media_tempo = sum(tempos_execucao) / len(tempos_execucao)
 
     print("Média do tempo de execução:", media_tempo)
-    print("Vetor ordenado (método quadrático):", vetor_ordenado_quadratico)
+    #print("Vetor ordenado (método quadrático):", vetor_ordenado_quadratico)
 
 
 if __name__ == "__main__":
