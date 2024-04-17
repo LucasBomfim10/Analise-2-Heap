@@ -1,100 +1,67 @@
 import math
 import time
 import random
+import heapq  # Importando a biblioteca para trabalhar com heaps
 
+def sqrt_sort_max_heap(vetor):
+    """
+    Args:
+        vetor (list): O vetor a ser ordenado.
 
-def makeheap(heap):
-    n = len(heap)
-    for i in range(n // 2 - 1, -1, -1):
-        heapify(heap, n, i)
+    Returns:
+        list: O vetor ordenado.
+    """
 
-
-def heapify(heap, n, i):
-    largest = i
-    left = 2 * i + 1
-    right = 2 * i + 2
-
-    if left < n and heap[left] > heap[largest]:
-        largest = left
-
-    if right < n and heap[right] > heap[largest]:
-        largest = right
-
-    if largest != i:
-        heap[i], heap[largest] = heap[largest], heap[i]
-        heapify(heap, n, largest)
-
-
-def insertheap(heap, value):
-    heap.append(value)
-    i = len(heap) - 1
-    while i > 0:
-        parent = (i - 1) // 2
-        if heap[parent] < heap[i]:
-            heap[parent], heap[i] = heap[i], heap[parent]
-            i = parent
-        else:
-            break
-
-
-def removeheap(heap):
-    if not heap:
-        return None
-    root = heap[0]
-    heap[0] = heap[-1]
-    del heap[-1]
-    heapify(heap, len(heap), 0)
-    return root
-
-
-def sqrt_sort_quadratico(vetor):
     n = len(vetor)
     k = math.floor(math.sqrt(n))
+    partes = []
     vetor_ordenado = []
+    max_heaps = []
 
-    # Dividir o vetor em partes e criar um heap para cada parte
-    partes = [vetor[i:i+k] for i in range(0, n, k)]
-    for parte in partes:
-        
-        makeheap(parte)
-
-    while any(partes):
-        # Encontrar o maior elemento de cada parte e comparar com o heap
-        maior_global = [-1]
-        makeheap(maior_global)
-        indice_global = None
+    # Dividir o vetor em partes e criar um max heap para cada parte
+    for i in range(0, n, k):
+        fim_parte = min(i + k, n)
+        parte = vetor[i:fim_parte]
+        heapq._heapify_max(parte)  # Transforma a parte em um max heap
+        partes.append(parte)
+        max_heaps.append(parte[0])  # Adiciona o maior elemento da max heap à lista de max heaps
         #print(partes)
-        for i, parte in enumerate(partes):
-            if parte:
-                if parte[0] > maior_global[0]:
-                    maior_global = [parte[0]]
-                    indice_global = i
-                    
+    heapq._heapify_max(max_heaps)  # Transforma a lista de max heaps em um max heap
 
-        if indice_global is not None:
-            vetor_ordenado.insert(0, removeheap(partes[indice_global]))
+    while max_heaps:
+       
+        maior_heap = heapq._heappop_max(max_heaps)  # Pega o maior elemento entre as max heaps
+        for parte in partes:
+            if parte and parte[0] == maior_heap:
+                heapq._heappop_max(parte)  # Remove o maior elemento da max heap correspondente
+                if parte:
+                    heapq.heappush(max_heaps, parte[0])  # Re-heapify após a remoção
+                    heapq._heapify_max(max_heaps)  # Transforma a lista de volta em um max heap
+                break
+        vetor_ordenado.append(maior_heap)  # Adiciona o maior elemento ao vetor ordenado
 
-    return vetor_ordenado
-
+    return vetor_ordenado[::-1]  # Inverte o vetor para obter a ordenação correta
 
 def main():
-
-    n = random.randint(100, 100)
-
+    """
+    Função principal para demonstração do algoritmo de ordenação por max heap.
+    """
+    n = random.randint(1000000, 1000000)
     vetor = [random.randint(1, 100) for _ in range(n)]
 
     #print("Vetor original:", vetor)
-    start_time = time.time()
+
     tempos_execucao = []
-    for _ in range(3):
-        vetor_ordenado_quadratico = sqrt_sort_quadratico(vetor.copy())
+    for _ in range(1):
+        start_time = time.time()
+        vetor_ordenado_max_heap = sqrt_sort_max_heap(vetor)
         tempo_execucao = time.time() - start_time
         tempos_execucao.append(tempo_execucao)
 
     media_tempo = sum(tempos_execucao) / len(tempos_execucao)
-    print("Média do tempo de execução:", media_tempo)
-    #print("Vetor ordenado (método quadrático):", vetor_ordenado_quadratico)
 
+    print("Média do tempo de execução:", media_tempo)
+    #print("Vetor ordenado (método max heap):", vetor_ordenado_max_heap)
 
 if __name__ == "__main__":
     main()

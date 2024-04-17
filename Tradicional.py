@@ -2,16 +2,6 @@ import math
 import time
 import random
 
-# Função de ordenação bubbleSort
-
-
-def bubbleSort(lista):
-    for num in range(len(lista)-1, 0, -1):
-        for i in range(num):
-            if lista[i] > lista[i+1]:
-                temp = lista[i]
-                lista[i] = lista[i+1]
-                lista[i+1] = temp
 
 
 def sqrt_sort_quadratico(vetor):
@@ -36,8 +26,9 @@ def sqrt_sort_quadratico(vetor):
         if i + k >= n:  
             fim_parte = n
         partes.append(vetor[i:fim_parte])
-        bubbleSort(partes[-1])  # ordena as partes
-        # partes[-1].sort()
+        sorted(partes[-1])  # ordena as partes
+        
+
 
     #print(partes)
     while any(partes):
@@ -64,18 +55,19 @@ def main():
     """
     Função principal para demonstração do algoritmo de ordenação por seleção de raiz quadrada.
     """
-    n = random.randint(10000, 10000)
+    n = random.randint(1000, 1000)
 
     vetor = [random.randint(1, 100) for _ in range(n)]
 
     #print("Vetor original:", vetor)
 
-    start_time = time.time()
+
     tempos_execucao = []
-    for _ in range(3):
-        vetor_ordenado_quadratico = sqrt_sort_quadratico(vetor.copy())
-        tempo_execucao = time.time() - start_time
-        tempos_execucao.append(tempo_execucao)
+    for _ in range(1):
+      start_time = time.time()
+      vetor_ordenado_quadratico = sqrt_sort_quadratico(vetor)
+      tempo_execucao = time.time() - start_time
+      tempos_execucao.append(tempo_execucao)
 
     media_tempo = sum(tempos_execucao) / len(tempos_execucao)
 
